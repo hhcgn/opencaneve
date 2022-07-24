@@ -14,6 +14,7 @@ static SSD1306_t SSD1306;
 static uint8_t ssd1306_WriteCommand(I2C_HandleTypeDef *hi2c, uint8_t command)
 {
     return HAL_I2C_Mem_Write(hi2c, SSD1306_I2C_ADDR, 0x00, 1, &command, 1, 10);
+	
 }
 
 
@@ -166,6 +167,29 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color)
     }
 }
 
+
+
+void OLED_ShowCHinese(u8 x,u8 y,u8 no)
+{ //xy为坐标，no为汉字在数组中的位置   (使用的16x16的字体大小)  			    
+	u8 t,adder=0;
+	uint8_t i;
+
+  ssd1306_WriteCommand(&hi2c1, 0xB0+y );//设置y
+  ssd1306_WriteCommand(&hi2c1, 0x00);//设置x偏移
+  ssd1306_WriteCommand(&hi2c1, 0x10+x);//设置x
+
+  if(HAL_I2C_Mem_Write(&hi2c1, SSD1306_I2C_ADDR, 0x40, 1, Hzk[2*no], 16, 100)!=HAL_OK)  {
+		return;
+		}
+	ssd1306_WriteCommand(&hi2c1, 0xB0 +y+ 1);
+  ssd1306_WriteCommand(&hi2c1, 0x00);
+  ssd1306_WriteCommand(&hi2c1, 0x10+x);
+					
+if(HAL_I2C_Mem_Write(&hi2c1, SSD1306_I2C_ADDR, 0x40, 1, Hzk[2*no+1], 16, 100)!=HAL_OK)  {
+		return;
+				}
+			
+}
 
 //
 //  Draw 1 char to the screen buffer

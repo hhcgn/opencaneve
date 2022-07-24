@@ -44,11 +44,26 @@
 #include "st7735.h"
 #include "fontslcd.h"
 #include "testimg.h"
+#include "selfoled.h"
+//#include "tcs3472.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+typedef struct{
+	uint8_t 
+	page_leval,
+	istop,
+	isbottom,
+	*next_page,
+	*last_page,
+	*page_title,
+	*page_data1,
+	*page_data2,
+	*page_data3,
+	*page_data4,
+	*page_bottom_title;
+}menu_type;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -81,7 +96,7 @@ float pressure, temperature, humidity;
 uint16_t bmp_size;
 uint8_t bmp_Data[256];
 
-
+//COLOR_RGBC rgb1;
 
 /* USER CODE END PV */
 
@@ -91,6 +106,7 @@ void SystemClock_Config(void);
 int flashWriteData(int paramSizeKb, uint64_t data[], size_t len);
 void flashReadData(int paramSizeKb, uint8_t *data, size_t len);
 int comptodeg(int deg);
+void menu();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -125,6 +141,7 @@ void loop() {
 //    ST7735_WriteString(0, 3*10+3*18, "Font_16x26", Font_16x26, ST7735_BLUE, ST7735_BLACK);
 //    HAL_Delay(2000);
 
+		ST7735_WriteString(0, 0, "BLACK", Font_7x10, ST7735_WHITE, ST7735_BLACK);
     // Check colors
  /*   ST7735_FillScreen(ST7735_BLACK);
     ST7735_WriteString(0, 0, "BLACK", Font_11x18, ST7735_WHITE, ST7735_BLACK);
@@ -243,36 +260,44 @@ int main(void)
 		deg=ctoi(flash_data_read);
   // Write data to local screenbuffer
   ssd1306_SetCursor(0, 0);
-  ssd1306_WriteString("ssd1306", Font_7x10, White);
+//  ssd1306_WriteString("ssd1306", Font_7x10, White);
+	//ssd1306_WriteString((char *)' ', Font_16x16, White);
 	
-	  ssd1306_UpdateScreen(&hi2c1);
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value1, 1);
-	HAL_ADC_Start(&hadc2);
+	OLED_ShowCHinese(0,0,1);
+	HAL_Delay(2000);
+	ssd1306_UpdateScreen(&hi2c1);
+//	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value1, 1);
+//	HAL_ADC_Start(&hadc2);
 	
 	//vl53l0x
-	char msgBuffer[52];
-	for (uint8_t i = 0; i < 52; i++) {
-		msgBuffer[i] = ' ';
-	}
+//	char msgBuffer[52];
+//	for (uint8_t i = 0; i < 52; i++) {
+//		msgBuffer[i] = ' ';
+//	}
 
-	// Initialise the VL53L0X
-	statInfo_t_VL53L0X distanceStr;
-	initVL53L0X(1, &hi2c1);
+//	// Initialise the VL53L0X
+//	statInfo_t_VL53L0X distanceStr;
+//	initVL53L0X(1, &hi2c1);
 
-	// Configure the sensor for high accuracy and speed in 20 cm.
-	setSignalRateLimit(200);
-	setVcselPulsePeriod(VcselPeriodPreRange, 10);
-	setVcselPulsePeriod(VcselPeriodFinalRange, 14);
-	setMeasurementTimingBudget(300 * 1000UL);
+//	// Configure the sensor for high accuracy and speed in 20 cm.
+//	setSignalRateLimit(200);
+//	setVcselPulsePeriod(VcselPeriodPreRange, 10);
+//	setVcselPulsePeriod(VcselPeriodFinalRange, 14);
+//	setMeasurementTimingBudget(300 * 1000UL);
 
-	uint16_t distance;
+//	uint16_t distance;
 	
 	
 	
 	//LCD
 	
-		init();
+//		init();
 	
+	//TCS3472_Init();
+
+	//selfiic
+	OLED_Init();                   //=====OLED³õÊ¼»¯
+	OLED_Clear();									 //=====OLEDÇåÆÁ		
 	//bmp
 //	bmp280_init_default_params(&bmp280.params);
 //	bmp280.addr = BMP280_I2C_ADDRESS_0;
@@ -298,16 +323,17 @@ int main(void)
   }*/
 
   // Copy all data from local screenbuffer to the screen
-
+	uint8_t ihz=0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		HAL_Delay(10);
+		HAL_Delay(100);
 		
-		distance = readRangeSingleMillimeters(&distanceStr);
+		//menu();
+//		distance = readRangeSingleMillimeters(&distanceStr);
 		
 		itoa(deg,oled_data1,10);
 		for(int i3=strlen(oled_data1);i3<5;i3++)
@@ -323,10 +349,11 @@ int main(void)
 		ssd1306_WriteString("o", Font_7x10, White);
 		ssd1306_SetCursor(0, 50);
 		ssd1306_WriteString(flash_data_read, Font_7x10, White);
-
+		OLED_Float(0,0,134.932,8);
+		OLED_Num5(0,2,deg);
 		ssd1306_SetCursor(50, 50);
 		
-		loop();
+//		loop();
 		/*while (!bmp280_read_float(&bmp280, &temperature, &pressure, &humidity)) {
 			bmp_size = sprintf((char *)bmp_Data,
 					"Temperature/pressure reading failed\n");
@@ -347,16 +374,21 @@ int main(void)
 			HAL_UART_Transmit(&huart1, bmp_Data, bmp_size, 1000);
 		}*/
 		
-		itoa(distance,msgBuffer,10);
-		for(int i3=strlen(msgBuffer);i3<6;i3++)
-			msgBuffer[i3]=' ';
-		//sprintf(msgBuffer,"mm", distance);
-		ssd1306_WriteString(msgBuffer, Font_7x10, White);
-		ssd1306_SetCursor(90, 50);
-		ssd1306_WriteString("mm", Font_7x10, White);
+//		ito[
+
+		
+		
+		
 		ssd1306_UpdateScreen(&hi2c1);
 		
+//		OLED_ShowChar(0,0,'a',1);
+//		HAL_Delay(50);
+//		OLED_ShowChar(20,20,'b',1);
+		OLED_ShowCHinese(0,0,ihz);
+		ihz++;
+		if(ihz>17) ihz=0;
 		
+		OLED_ShowString(68,7,(uint8_t *)"absdcg",8);
 		/*itoa(ad1,oled_data1,10);
 		itoa(ad2,oled_data2,10);
 		for(int i3=strlen(oled_data1);i3<5;i3++)
@@ -446,19 +478,24 @@ int comptodeg(int deg){
 	return deg;
 }
 
-
+void menu(){
+	
+}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	
-	if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_15)&&HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_13)) {
+/*	if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_15)&&HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_13)) {
 			click_long=0;
 			deg_sta=0;
 		}
 		else click_long+=1;
-		if(click_long>15) deg+=(deg_sta==1? 1:(deg_sta==2 ? (-1):0));
+		if(click_long>15) deg+=(deg_sta==1? 1:(deg_sta==2 ? (-1):0));*/
 		__HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,deg);
   HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_13);
+//		HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_4);
+//		HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_11);
+//		HAL_GPIO_TogglePin(GPIOA,GPIO_PIN_12);
 }
 
 int htoi(char a[])
