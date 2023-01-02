@@ -1,1 +1,2 @@
-
+arduino->项目->加载库->添加zip库
+need library：https://github.com/T-vK/ESP32-BLE-Mouse/releases
