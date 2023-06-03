@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file>350.jpg</file>
+        <file>10001.jpg</file>
+        <file>10002.jpg</file>
+        <file>10003.jpg</file>
+        <file>login.png</file>
+        <file>newpass.png</file>
+        <file>OIP-C (1).jpg</file>
+        <file>OIP-C.jpg</file>
+        <file>pass.png</file>
+        <file>pic.qrc</file>
+        <file>user.png</file>
+        <file>3D.png</file>
+        <file>back.png</file>
+        <file>backgrandtree.jpg</file>
+        <file>count.png</file>
+        <file>denglu.png</file>
+        <file>eyeing.png</file>
+        <file>LED1.png</file>
+        <file>LED2.png</file>
+        <file>lighting2.png</file>
+        <file>lihht1.png</file>
+        <file>listening.gif</file>
+        <file>music.png</file>
+        <file>passward.png</file>
+        <file>temp.png</file>
+        <file>warning1.png</file>
+        <file>warning2.gif</file>
+        <file>warning3.png</file>
+        <file>warning4.png</file>
+    </qresource>
+</RCC>

@@ -1,4 +1,4 @@
-#include <BleMouse.h>
+#include <BleMouse.h>//蓝牙库，可在上级目录下载
 #include <WiFi.h>
 
 const int led=2;
@@ -10,9 +10,9 @@ BleMouse bleMouse("ESP32蓝牙鼠标","Espressif",100);//其中“ESP32蓝牙键
 void setup() {
   Serial.begin(115200);
   Serial.println("Starting BLE work!");
-  pinMode(led,OUTPUT);
-  pinMode(34,INPUT_PULLUP);
-  pinMode(35,INPUT_PULLUP);
+  pinMode(led,OUTPUT);//板载指示LED
+  pinMode(34,INPUT_PULLUP);//P34，配置的上拉，外部我也手动进行了电阻上拉
+  pinMode(35,INPUT_PULLUP);//P35
   pinMode(32,INPUT_PULLUP);
   pinMode(33,INPUT_PULLUP);
   pinMode(25,INPUT_PULLUP);
@@ -21,7 +21,7 @@ void setup() {
 }
 
 void loop() {
-  if(bleMouse.isConnected()) {
+  if(bleMouse.isConnected()) {//连接状态指示，这个库可能有问题，连接断开后会连接不上，需要复位或者重新上电
     digitalWrite(led,LED_ON);
   }else{
     digitalWrite(led,LED_OFF);
@@ -42,7 +42,7 @@ void loop() {
     delay(150);
     if(digitalRead(32)==LOW){
      flag=flag==0? 1:0;
-    bleMouse.click(MOUSE_BACK);
+    bleMouse.click(MOUSE_BACK);//长按后退
     delay(500);
     }
     }
@@ -66,7 +66,7 @@ void loop() {
       click(type_s);
       }
       else{
-        delay(50);
+        delay(50);//无操作时的延时
         }
         delay(10);
       
@@ -94,7 +94,7 @@ void click(char t)
       else c=-1;
       startTime = millis();
     while(millis()<startTime+30) {
-      bleMouse.move(0,0,c);
+      bleMouse.move(0,0,c);//上下滚动，改变延时和while+的值能改变上下移动的速度
       delay(20);
     }
       }
@@ -114,8 +114,8 @@ void move(char t)
    else if(t=='r'){a=1;b=0;}
    startTime = millis();
     while(millis()<startTime+60) {
-      bleMouse.move(a,b);
-      delay(3);
+      bleMouse.move(a,b);//移动鼠标
+      delay(3);//改变这个和while中+的值能改变每次移动的距离
     }
   
     

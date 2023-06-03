@@ -1,0 +1,38 @@
+<RCC>
+    <qresource prefix="/">
+        <file>photo/3D.png</file>
+        <file>photo/back.png</file>
+        <file>photo/backgrandtree.jpg</file>
+        <file>photo/count.png</file>
+        <file>photo/denglu.png</file>
+        <file>photo/eyeing.png</file>
+        <file>photo/LED1.png</file>
+        <file>photo/LED2.png</file>
+        <file>photo/lighting2.png</file>
+        <file>photo/lihht1.png</file>
+        <file>photo/listening.gif</file>
+        <file>photo/music.png</file>
+        <file>photo/passward.png</file>
+        <file>photo/temp.png</file>
+        <file>photo/warning1.png</file>
+        <file>photo/warning2.gif</file>
+        <file>photo/warning3.png</file>
+        <file>photo/warning4.png</file>
+        <file>photo/close.png</file>
+        <file>photo/pbmini.png</file>
+        <file>photo/pbmini2.png</file>
+        <file>photo/pbmini3.png</file>
+        <file>photo/mini4.png</file>
+        <file>photo/3D1.png</file>
+        <file>photo/shuidi.png</file>
+        <file>photo/close2.png</file>
+        <file>photo/led11.png</file>
+        <file>photo/led22.png</file>
+        <file>photo/led33.png</file>
+        <file>photo/led44.png</file>
+        <file>photo/count1.png</file>
+        <file>photo/count2.png</file>
+        <file>photo/mima1.png</file>
+        <file>photo/mima2.png</file>
+    </qresource>
+</RCC>
